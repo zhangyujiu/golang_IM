@@ -52,7 +52,7 @@ func (this *Server) Handler(conn net.Conn) {
 	}()
 
 	for {
-		timeChan := time.After(time.Second * 20)
+		timeChan := time.After(time.Second * 300)
 		select {
 		case <-isLive:
 			//当前用户活跃，需要重置定时器

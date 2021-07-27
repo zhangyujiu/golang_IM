@@ -73,6 +73,24 @@ func (this *User) DealWithMessage(msg string) {
 			this.Name = newName
 			this.SendMessage("Username modified successfully:" + this.Name + "\n")
 		}
+	} else if len(msg) > 4 && msg[:3] == "to|" {
+		//消息格式 to|张三|消息
+		remoteName := strings.Split(msg, "|")[1]
+		if remoteName == "" {
+			this.SendMessage("Incorrect message format")
+			return
+		}
+		remoteUser, ok := this.server.OnlineMap[remoteName]
+		if !ok {
+			this.SendMessage("User does not exist")
+			return
+		}
+		content := strings.Split(msg, "|")[2]
+		if content == "" {
+			this.SendMessage("Message cannot be empty")
+			return
+		}
+		remoteUser.SendMessage(this.Name + ":" + content)
 	} else {
 		this.server.Broadcast(this, msg)
 	}
